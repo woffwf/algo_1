@@ -1,20 +1,31 @@
-import unittest
+class TreeNode:
+    def __init__(self, value=0, left=None, right=None):
+        self.value = value
+        self.left = left
+        self.right = right
 
-def sortedSquares(nums):
-    # тут воно має перетворити в квадрат і відсортувати за зростанням
-    squared_nums = sorted([x ** 2 for x in nums])
-    return squared_nums
 
-class TestSortedSquares(unittest.TestCase):
-    def test_1(self):
-        nums = [-4, -2, 0, 1, 3]
-        expected_result = [0, 1, 4, 9, 16]
-        self.assertEqual(sortedSquares(nums), expected_result)
+def sum_of_depths(root: TreeNode, depth=0) -> int:
+    if root is None:
+        return 0
 
-    def test_2(self):
-        nums = [1, 2, 3, 4, 5]
-        expected_result = [1, 4, 9, 16, 25]
-        self.assertEqual(sortedSquares(nums), expected_result)
+    depth_of_node = depth
 
-if __name__ == "__main__":
-    unittest.main()
+    left_depth = sum_of_depths(root.left, depth + 1)
+    right_depth = sum_of_depths(root.right, depth + 1)
+
+    total_depth = depth_of_node + left_depth + right_depth
+
+    return total_depth
+
+
+root = TreeNode(1)
+root.left = TreeNode(2)
+root.right = TreeNode(3)
+root.left.left = TreeNode(4)
+root.left.right = TreeNode(5)
+root.right.left = TreeNode(6)
+root.right.right = TreeNode(7)
+
+result = sum_of_depths(root)
+print(result)
