@@ -1,31 +1,37 @@
-class TreeNode:
-    def __init__(self, value=0, left=None, right=None):
-        self.value = value
-        self.left = left
-        self.right = right
+def twoSum(nums, target):
+
+        num_dict = {}
+        pairs = []
+        for i, num in enumerate(nums):
+            # Обчислюю різницю між цільовим значенням і поточним числом
+            complement = target - num
+            if complement in num_dict:
+                pairs.append([num_dict[complement], i])
+            num_dict[num] = i
+
+        return pairs
+
+nums1 = [3, 6, 1, 8]
+target1 = 9
+print(twoSum(nums1, target1))
+
+nums2 = [1, 2, 3, 4, 5]
+target2 = 9
+print(twoSum(nums2, target2))
+
+nums3 = [10, 20, 30, 40, 50]
+target3 = 60
+print(twoSum(nums3, target3))
+
+nums4 = [3, 5, 10, 2]
+target4 = 6
+print(twoSum(nums4,target4))
+
+nums5 = [1, 2, 3, 4, 5, 6,  7, 8, 9]
+target5 = 10
+print(twoSum(nums5,target5))
+#0,8 1,7, 2,6, 3,5
 
 
-def sum_of_depths(root: TreeNode, depth=0) -> int:
-    if root is None:
-        return 0
-
-    depth_of_node = depth
-
-    left_depth = sum_of_depths(root.left, depth + 1)
-    right_depth = sum_of_depths(root.right, depth + 1)
-
-    total_depth = depth_of_node + left_depth + right_depth
-
-    return total_depth
 
 
-root = TreeNode(1)
-root.left = TreeNode(2)
-root.right = TreeNode(3)
-root.left.left = TreeNode(4)
-root.left.right = TreeNode(5)
-root.right.left = TreeNode(6)
-root.right.right = TreeNode(7)
-
-result = sum_of_depths(root)
-print(result)
