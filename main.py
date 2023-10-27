@@ -1,20 +1,35 @@
-import unittest
+def merge_intervals(intervals):
+    if not intervals:
+        return []
 
-def sortedSquares(nums):
-    # тут воно має перетворити в квадрат і відсортувати за зростанням
-    squared_nums = sorted([x ** 2 for x in nums])
-    return squared_nums
+    intervals.sort(key=lambda x: x[0])
 
-class TestSortedSquares(unittest.TestCase):
-    def test_1(self):
-        nums = [-4, -2, 0, 1, 3]
-        expected_result = [0, 1, 4, 9, 16]
-        self.assertEqual(sortedSquares(nums), expected_result)
+    merged = []
+    current_interval = intervals[0]
 
-    def test_2(self):
-        nums = [1, 2, 3, 4, 5]
-        expected_result = [1, 4, 9, 16, 25]
-        self.assertEqual(sortedSquares(nums), expected_result)
+    for interval in intervals[1:]:
+        if interval[0] <= current_interval[1]:
+            current_interval = (current_interval[0], max(current_interval[1], interval[1]))
+        else:
+            merged.append(current_interval)
+            current_interval = interval
 
-if __name__ == "__main__":
-    unittest.main()
+    merged.append(current_interval)
+
+    merge_intervals = []
+
+    for interval in merged:
+        start_hour = 9 + interval[0] // 2
+        start_minute = (interval[0] % 2) * 30
+        end_hour = 9 + interval[1] // 2
+        end_minute = (interval[1] % 2) * 30
+        interval_str = f"{start_hour:02d}:{start_minute:02d} - {end_hour:02d}:{end_minute:02d}"
+        merge_intervals.append((interval, interval_str))
+
+    return merge_intervals
+
+intervals = [(0, 1), (3, 5), (4, 8), (10, 12), (9, 10)]
+result = merge_intervals(intervals)
+
+for interval, interval_str in result:
+    print(f"{interval} ({interval_str})")
