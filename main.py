@@ -1,20 +1,46 @@
-import unittest
+from collections import defaultdict, deque
 
-def sortedSquares(nums):
-    # тут воно має перетворити в квадрат і відсортувати за зростанням
-    squared_nums = sorted([x ** 2 for x in nums])
-    return squared_nums
 
-class TestSortedSquares(unittest.TestCase):
-    def test_1(self):
-        nums = [-4, -2, 0, 1, 3]
-        expected_result = [0, 1, 4, 9, 16]
-        self.assertEqual(sortedSquares(nums), expected_result)
+def find_minimum_depth(adj_list, start_node):
+    visited = set()
+    depth = 0
+    queue = deque([(start_node, depth)])
 
-    def test_2(self):
-        nums = [1, 2, 3, 4, 5]
-        expected_result = [1, 4, 9, 16, 25]
-        self.assertEqual(sortedSquares(nums), expected_result)
+    while queue:
+        node, depth = queue.popleft()
+        visited.add(node)
+
+        is_leaf = True
+        for neighbor in adj_list[node]:
+            if neighbor not in visited:
+                queue.append((neighbor, depth + 1))
+                is_leaf = False
+
+        if is_leaf:
+            return depth + 1
+
+
+def main():
+
+    adj_list = defaultdict(list)
+    with open('input.txt', 'r') as file:
+        for line in file:
+            data = line.strip().split(',')
+            if len(data) == 2:
+                u, v = map(int, data)
+                adj_list[u].append(v)
+                adj_list[v].append(u)
+
+
+    root = 1
+
+
+    min_depth = find_minimum_depth(adj_list, root)
+
+
+    with open('output.txt', 'w') as file:
+        file.write(str(min_depth))
+
 
 if __name__ == "__main__":
-    unittest.main()
+    main()
